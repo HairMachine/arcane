@@ -9,8 +9,6 @@ sub Component.setEntity(entity_id as integer)
 	this.entity_id = entity_id
 end sub
 
-
-
 type ComponentList
 	components(255) as Component ptr
 	length as integer
@@ -63,18 +61,12 @@ function ComponentList.entityComponents(eid as integer) as ComponentList
 	return filtered
 end function
 
-
-
-
 type Entity
 	id as integer = -1
 	name as string
 	tp as string
 end type
 dim shared NULL_ENTITY as Entity
-
-
-
 
 type EntityList
 	entities(127) as Entity
@@ -106,8 +98,7 @@ sub EntityList.remove(id as integer)
 	next
 end sub
 
-
-' helper function to destroy an entity and clean up and components it owns
+' helper function to destroy an entity and clean up any components it owns
 sub EntityDestroy(eid as integer, el as EntityList, cl as ComponentList)
 	dim entity_components as ComponentList = cl.entityComponents(eid)
 	for i as integer = 0 to entity_components.length - 1

@@ -42,22 +42,22 @@ actors_ts.tileMap = actors_tm
 dim map as MapData
 map.loadFromFile("test")
 
+dim gm as Gamestate
 dim el as EntityList
 dim cl as ComponentList
+
 el.add("", "") 'add a null entity for id 0
-dim player_id as integer = player_entity_create(el, cl)
+gm.playerId = player_entity_create(el, cl)
 dim thingum_id as integer = thingum_entity_create(el, cl)
 dim thingum2_id as integer = thingum_entity_create(el, cl)
 
-InventoryPickupSystem(thingum_id, player_id, cl)
-InventoryPickupSystem(thingum2_id, player_id, cl)
+InventoryPickupSystem(thingum_id, gm.playerId, cl)
+InventoryPickupSystem(thingum2_id, gm.playerId, cl)
 
 dim camera as CameraClass
 camera.w = 10
 camera.h = 10
-camera.lockToEntity(1, cl)
-
-dim gm as Gamestate
+camera.lockToEntity(gm.playerId, cl)
 
 do
 	KeyboardControlSystem(cl, el, gm, map)
