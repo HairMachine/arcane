@@ -1,28 +1,18 @@
 #include once "util.bas"
 #include once "event.bas"
-#include once "map.bas"
 #include once "tile.bas"
 #include once "ec.bas"
+#include once "map.bas"
 #include once "game.bas"
 #include once "inventory.bas"
 #include once "actor.bas"
 #include once "input.bas"
 #include once "draw.bas"
+#include once "entity_create.bas"
 
-function player_entity_create(el as EntityList, cl as ComponentList) as integer
-	dim eid as integer = el.add("Player", "player")
-	cl.add(new ControllableComponent(eid))
-	cl.add(new PositionComponent(eid, 10, 10, 1, "@"))
-	return eid
-end function
-
-function thingum_entity_create(el as EntityList, cl as ComponentList) as integer
-	dim eid as integer = el.add("A Strange Thingum", "thingum")
-	return eid
-end function
 
 screenres 800, 600, 32
-
+randomize timer
 
 dim tm as TileMap
 tm.insert("#", 0, 0)
@@ -34,17 +24,20 @@ ts.tileMap = tm
 
 dim actors_tm as TileMap
 actors_tm.insert("@", 0, 0)
+actors_tm.insert("+", 1, 1)
+actors_tm.insert("/", 1, 2)
 
 dim actors_ts as Tileset
 actors_ts.loadFromFile("people")
 actors_ts.tileMap = actors_tm
 
-dim map as MapData
-map.loadFromFile("test")
-
 dim gm as Gamestate
 dim el as EntityList
 dim cl as ComponentList
+
+dim map as MapData
+map.loadFromFile("test")
+MapToEntitySystem(el, cl, map)
 
 el.add("", "") 'add a null entity for id 0
 gm.playerId = player_entity_create(el, cl)
@@ -66,6 +59,7 @@ do
 	cls
 	MapDrawSystem(map, ts, camera)	
 	EntityDrawSystem(cl, actors_ts, camera)
+	AttributeDisplaySystem(cl, gm.playerId)
 	screenunlock
 	sleep 1
 loop until gm.gameover = 1

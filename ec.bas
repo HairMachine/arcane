@@ -16,6 +16,7 @@ type ComponentList
 	declare sub remove(id as integer)
 	declare function filter(cpt as string) as ComponentList
 	declare function entityComponents(eid as integer) as ComponentList
+	declare function entityComponent(eid as integer, component as string) as Component ptr
 end type
 
 sub ComponentList.add(c as Component ptr)
@@ -59,6 +60,13 @@ function ComponentList.entityComponents(eid as integer) as ComponentList
 		end if
 	next
 	return filtered
+end function
+
+function ComponentList.entityComponent(eid as integer, component as string) as Component ptr
+	for i as integer = 0 to this.length - 1
+		if (this.components(i)->entity_id = eid and this.components(i)->name = component) then return this.components(i)
+	next
+	return 0
 end function
 
 type Entity

@@ -39,8 +39,20 @@ sub EntityDrawSystem(cl as ComponentList, ts as Tileset, cam as CameraClass)
 	dim matching as ComponentList = cl.filter("PositionComponent")
 	for i as integer = 0 to matching.length - 1
 		dim this_comp as PositionComponent ptr = Cast(PositionComponent ptr, matching.components(i))
-		if this_comp->visible = 1 then
+		if this_comp->visible = 1 and this_comp->x - cam.x <= cam.w and this_comp->y - cam.y <= cam.h then
 			tile_draw_from_char(this_comp->x - cam.x, this_comp->y - cam.y, this_comp->glyph, ts)
 		end if
 	next
+end sub
+
+sub AttributeDisplaySystem(cl as ComponentList, eid as integer)
+	dim matched as ComponentList = cl.entityComponents(eid).filter("AttributeComponent")
+	dim values as AttributeComponent ptr = cast(AttributeComponent ptr, matched.components(0))
+	locate 1, 50: print "HP: " + str(values->hp) + "/" + str(values->maxHp)
+	locate 2, 50: print "Sanity: " + str(values->sanity) + "/" + str(values->maxSanity)
+	locate 4, 50: print "Strength: " + str(values->strength)
+	locate 5, 50: print "Dexterity: " + str(values->dexterity)
+	locate 6, 50: print "Wisdom: " + str(values->wisdom)
+	locate 7, 50: print "Intelligence: " + str(values->intelligence)
+	locate 8, 50: print "Charisma: " + str(values->charisma)
 end sub

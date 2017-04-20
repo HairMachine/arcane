@@ -5,6 +5,7 @@ type MapData
 	declare sub inputLine(dat as string)
 	declare sub loadFromFile(filename as string)
 	declare function get(x as integer, y as integer) as string
+	declare sub set(x as integer, y as integer, c as string)
 end type
 
 sub MapData.inputLine(dat as string)
@@ -30,3 +31,8 @@ function MapData.get(x as integer, y as integer) as string
 	if x > 63 or y > 63 or x < 0 or y < 0 then return "#"
 	return this.grid(x, y)
 end function
+
+sub MapData.set(x as integer, y as integer, c as string) 
+	if x > 63 or y > 63 or x < 0 or y < 0 then exit sub
+	this.grid(x, y) = c
+end sub
