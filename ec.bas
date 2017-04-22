@@ -80,7 +80,6 @@ type EntityList
 	entities(127) as Entity
 	declare function add(n as string, tp as string) as integer
 	declare sub remove(id as integer)
-	declare function find(id as integer) as Entity
 end type
 
 function EntityList.add(n as string, t as string) as integer

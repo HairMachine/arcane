@@ -4,7 +4,7 @@ type PositionComponent extends Component
 	y as integer
 	visible as integer
 	glyph as string
-	solid as integer
+	solid as integer 'any walkable actor can be picked up
 end type
 
 constructor PositionComponent(eid as integer, x as integer, y as integer, visible as integer, glyph as string, solid as integer)
@@ -57,17 +57,20 @@ constructor DoorComponent(eid as integer, o as integer, l as integer)
 	this.locked = l
 end constructor
 
-sub CollisionResolutionSystem(cl as ComponentList, eid as integer)
-	dim posi as PositionComponent ptr = cast(PositionComponent ptr, cl.entityComponent(eid, "PositionComponent"))	
+sub CollisionResolutionSystem(gm as Gamestate, eid as integer)
+	dim posi as PositionComponent ptr = cast(PositionComponent ptr, gm.cl.entityComponent(eid, "PositionComponent"))
+	
 	' door opening
-	dim door as DoorComponent ptr = cast(DoorComponent ptr, cl.entityComponent(eid, "DoorComponent"))
+	dim door as DoorComponent ptr = cast(DoorComponent ptr, gm.cl.entityComponent(eid, "DoorComponent"))
 	if door <> 0 then 
 		door->open = 1
 		posi->glyph = "/"
 		posi->solid = 0
+		gm.ml.add("Opened door.")
+		exit sub
 	end if
 	
-	'monster fighting
+	'fighting
 	
 	'other contextual actions as appropriate
 end sub
@@ -76,45 +79,45 @@ end sub
  ' Check collision
  ' return entity id, -1 for wall, -2 for none
  '/
-function collision_check(x as integer, y as integer, cl as ComponentList, map as MapData) as integer
+function collision_check(x as integer, y as integer, gm as Gamestate, map as MapData) as integer
 	'check map first
 	if map.get(x, y) = "#" then return -1
 	'then check physical entites
-	dim matching  as ComponentList = cl.filter("PositionComponent")
+	dim matching  as ComponentList = gm.cl.filter("PositionComponent")
 	for i as integer = 0 to matching.length - 1
 		dim check as PositionComponent ptr = Cast(PositionComponent ptr, matching.components(i))
 		if check->x = x and check->y = y and check->solid = 1 then 
-			CollisionResolutionSystem(cl, check->entity_id)
+			CollisionResolutionSystem(gm, check->entity_id)
 			return check->entity_id
 		end if
 	next i
 	return -2
 end function
 
-sub MoveEntitySystem(cl as ComponentList, map as MapData, eid as integer, direction as string)
-	dim ecmps as ComponentList = cl.entityComponents(eid)
+sub MoveEntitySystem(gm as Gamestate, map as MapData, eid as integer, direction as string)
+	dim ecmps as ComponentList = gm.cl.entityComponents(eid)
 	dim matching as ComponentList = ecmps.filter("PositionComponent")
 	dim moving as PositionComponent ptr = Cast(PositionComponent ptr, matching.components(0))
 	if moving = 0 then exit sub
 	select case direction
-		case "north": if collision_check(moving->x, moving->y - 1, cl, map) = -2 then moving->y -= 1
+		case "north": if collision_check(moving->x, moving->y - 1, gm, map) = -2 then moving->y -= 1
 		case "northeast":
-			if collision_check(moving->x + 1, moving->y - 1, cl, map) = -2 then
+			if collision_check(moving->x + 1, moving->y - 1, gm, map) = -2 then
 				moving->y -= 1:	moving->x += 1
 			end if
-		case "east": if collision_check(moving->x + 1, moving->y, cl, map) = -2 then moving->x += 1
+		case "east": if collision_check(moving->x + 1, moving->y, gm, map) = -2 then moving->x += 1
 		case "southeast": 
-			if collision_check(moving->x + 1, moving->y + 1, cl, map) = -2 then	
+			if collision_check(moving->x + 1, moving->y + 1, gm, map) = -2 then	
 				moving->x += 1: moving->y += 1
 			end if
-		case "south": if collision_check(moving->x, moving->y + 1, cl, map) = -2 then moving->y += 1
+		case "south": if collision_check(moving->x, moving->y + 1, gm, map) = -2 then moving->y += 1
 		case "southwest":
-			if collision_check(moving->x - 1, moving->y + 1, cl, map) = -2 then
+			if collision_check(moving->x - 1, moving->y + 1, gm, map) = -2 then
 				moving->y += 1: moving->x -= 1
 			end if
-		case "west": if collision_check(moving->x - 1, moving->y, cl, map) = -2 then moving->x -= 1
+		case "west": if collision_check(moving->x - 1, moving->y, gm, map) = -2 then moving->x -= 1
 		case "northwest":
-			if collision_check(moving->x - 1, moving->y - 1, cl, map) = -2 then
+			if collision_check(moving->x - 1, moving->y - 1, gm, map) = -2 then
 				moving->x -= 1: moving->y -= 1
 			end if
 	end select

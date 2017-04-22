@@ -32,8 +32,8 @@ end sub
 type Tileset
 	sheet as any ptr
 	tsize as integer = 32
-	sizex as integer = 9
-	sizey as integer = 10
+	sizex as integer = 50
+	sizey as integer = 50
 	tileMap as TileMap
 	declare sub loadFromFile(filename as string)
 	declare destructor

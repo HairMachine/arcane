@@ -56,3 +56,12 @@ sub AttributeDisplaySystem(cl as ComponentList, eid as integer)
 	locate 7, 50: print "Intelligence: " + str(values->intelligence)
 	locate 8, 50: print "Charisma: " + str(values->charisma)
 end sub
+
+sub MessageDisplaySystem(ml as MessageLog)
+	locate 10, 50: print "Messages:"
+	dim p as integer = 0
+	for i as integer = ml.size to ml.size - 10 step -1
+		locate 10 + p, 50: print ml.get(i)
+		p += 1
+	next
+end sub

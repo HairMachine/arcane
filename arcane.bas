@@ -4,62 +4,55 @@
 #include once "ec.bas"
 #include once "map.bas"
 #include once "game.bas"
-#include once "inventory.bas"
 #include once "actor.bas"
+#include once "inventory.bas"
 #include once "input.bas"
 #include once "draw.bas"
 #include once "entity_create.bas"
 
-
-screenres 800, 600, 32
+screenres 640, 480, 32
 randomize timer
 
 dim tm as TileMap
-tm.insert("#", 0, 0)
-tm.insert(".", 3, 6)
+tm.insert("#", 24, 27)
+tm.insert(".", 8, 28)
+tm.insert("@", 4, 6)
+tm.insert("+", 4, 28)
+tm.insert("/", 3, 28)
+tm.insert("?", 0, 23)
 
 dim ts as Tileset
-ts.loadFromFile("dungeon")
+ts.loadFromFile("Nh32")
 ts.tileMap = tm
 
-dim actors_tm as TileMap
-actors_tm.insert("@", 0, 0)
-actors_tm.insert("+", 1, 1)
-actors_tm.insert("/", 1, 2)
-
-dim actors_ts as Tileset
-actors_ts.loadFromFile("people")
-actors_ts.tileMap = actors_tm
-
 dim gm as Gamestate
-dim el as EntityList
-dim cl as ComponentList
 
 dim map as MapData
 map.loadFromFile("test")
-MapToEntitySystem(el, cl, map)
+MapToEntitySystem(gm, map)
 
-el.add("", "") 'add a null entity for id 0
-gm.playerId = player_entity_create(el, cl)
-dim thingum_id as integer = thingum_entity_create(el, cl)
-dim thingum2_id as integer = thingum_entity_create(el, cl)
+gm.el.add("", "") 'add a null entity for id 0
+gm.playerId = player_entity_create(gm)
 
-InventoryPickupSystem(thingum_id, gm.playerId, cl)
-InventoryPickupSystem(thingum2_id, gm.playerId, cl)
+'InventoryPickupSystem(thingum_id, gm.playerId, gm)
+'InventoryPickupSystem(thingum2_id, gm.playerId, gm)
 
 dim camera as CameraClass
 camera.w = 10
 camera.h = 10
-camera.lockToEntity(gm.playerId, cl)
+camera.lockToEntity(gm.playerId, gm.cl)
+
+gm.ml.add("Welcome to Arcane!")
 
 do
-	KeyboardControlSystem(cl, el, gm, map)
+	KeyboardControlSystem(gm, map)
 	camera.followLockedEntity()
 	screenlock
 	cls
 	MapDrawSystem(map, ts, camera)	
-	EntityDrawSystem(cl, actors_ts, camera)
-	AttributeDisplaySystem(cl, gm.playerId)
+	EntityDrawSystem(gm.cl, ts, camera)
+	AttributeDisplaySystem(gm.cl, gm.playerId)
+	MessageDisplaySystem(gm.ml)
 	screenunlock
 	sleep 1
 loop until gm.gameover = 1

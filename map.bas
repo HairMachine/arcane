@@ -28,7 +28,7 @@ sub MapData.loadFromFile(filename as string)
 end sub
 
 function MapData.get(x as integer, y as integer) as string
-	if x > 63 or y > 63 or x < 0 or y < 0 then return "#"
+	if x >= sizex or y >= sizey or x <= 0 or y <= 0 then return "#"
 	return this.grid(x, y)
 end function
 
