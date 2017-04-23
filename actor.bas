@@ -1,13 +1,14 @@
 type PositionComponent extends Component
-	declare constructor(eid as integer, x as integer, y as integer, visible as integer, glyph as string, solid as integer)
+	declare constructor(eid as integer, x as integer, y as integer, visible as integer, glyph as string, solid as integer, liftable as integer)
 	x as integer
 	y as integer
 	visible as integer
 	glyph as string
-	solid as integer 'any walkable actor can be picked up
+	solid as integer
+	liftable as integer
 end type
 
-constructor PositionComponent(eid as integer, x as integer, y as integer, visible as integer, glyph as string, solid as integer)
+constructor PositionComponent(eid as integer, x as integer, y as integer, visible as integer, glyph as string, solid as integer, liftable as integer)
 	this.name = "PositionComponent"
 	this.entity_id = eid
 	this.x = x
@@ -15,6 +16,7 @@ constructor PositionComponent(eid as integer, x as integer, y as integer, visibl
 	this.visible = visible
 	this.glyph = glyph
 	this.solid = solid
+	this.liftable = liftable
 end constructor
 
 type AttributeComponent extends Component

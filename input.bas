@@ -22,9 +22,10 @@ sub KeyboardControlSystem(gm as Gamestate, map as MapData)
 		case "1": MoveEntitySystem(gm, map, controlling->entity_id, "southwest")
 		case "4": MoveEntitySystem(gm, map, controlling->entity_id, "west")
 		case "7": MoveEntitySystem(gm, map, controlling->entity_id, "northwest")
-		case "u": InventoryUseSystem(2, gm)
+		case "u": InventoryUseSystem(gm.playerId, gm)
 		case "i": InventoryListSystem(gm.playerId, gm)
 		case ",": InventoryPickupSystem(gm.playerId, gm)
+		case "d": InventoryDropSystem(gm.playerid, gm)
 		case "q": gm.gameover = 1
 	end select	
 end sub
