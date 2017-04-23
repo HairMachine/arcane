@@ -20,14 +20,16 @@ sub InventoryPickupSystem(picker as integer, gm as Gamestate)
 			'todo: stacks; for now, get everything
 			gm.ml.add("Picked up " + gm.el.entities(item->entity_id).name + ".")
 			dim matching as ComponentList = gm.cl.filter("InventoryItemComponent")
+			dim already_had as integer = 0
 			for j as integer = 0 to matching.length - 1
-				dim item as InventoryItemComponent ptr = Cast(InventoryItemComponent ptr, matching.components(j))
-				if item->holder = picker then
-					item->stack += 1
-					exit sub
+				dim held_item as InventoryItemComponent ptr = Cast(InventoryItemComponent ptr, matching.components(j))
+				if held_item->holder = picker and gm.el.entities(held_item->entity_id).name = gm.el.entities(item->entity_id).name then
+					held_item->stack += 1
+					already_had = 1
+					exit for
 				end if
 			next
-			gm.cl.add(new InventoryItemComponent(item->entity_id, picker))
+			if already_had = 0 then gm.cl.add(new InventoryItemComponent(item->entity_id, picker))
 			item->visible = 0
 			item->x = -5
 			item->y = -5
@@ -86,8 +88,5 @@ sub InventoryUseSystem(user as integer, gm as Gamestate)
 	'use
 	dim selection as integer = getkey - 49
 	if selection < 0 or selection > matching.length - 1 then exit sub
-	select case gm.el.entities(matching.components(selection)->entity_id).tp
-		case "thingum":
-			gm.ml.add("Nothing seems to happen.")
-	end select
+	ArtefactEffectSystem(matching.components(selection)->entity_id, user, gm)
 end sub
