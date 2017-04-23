@@ -26,6 +26,7 @@ sub KeyboardControlSystem(gm as Gamestate, map as MapData)
 		case "i": InventoryListSystem(gm.playerId, gm)
 		case ",": InventoryPickupSystem(gm.playerId, gm)
 		case "d": InventoryDropSystem(gm.playerid, gm)
+		case "n": InventoryNameSystem(gm)
 		case "q": gm.gameover = 1
 	end select	
 end sub

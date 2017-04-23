@@ -21,14 +21,23 @@ tm.insert("@", 4, 6)
 tm.insert("+", 4, 28)
 tm.insert("/", 3, 28)
 tm.insert("scroll", 0, 23)
-tm.insert("rod", 15, 25)
-tm.insert("gem", 14, 26)
+tm.insert("ivory rod", 16, 25)
+tm.insert("copper rod", 12, 25)
+tm.insert("green gem", 14, 26)
 tm.insert("ring", 0, 19)
 tm.insert("amulet", 4, 19)
-tm.insert("instrument", 20, 20)
+tm.insert("horn", 20, 20)
 tm.insert("lamp", 29, 19)
 tm.insert("dagger", 5, 13)
 tm.insert("mirror", 1, 20)
+tm.insert("silver bell", 4, 21)
+tm.insert("harp", 25, 20)
+tm.insert("dull bell", 26, 20)
+tm.insert("tambourine", 28, 20)
+tm.insert("red gem", 1, 27)
+tm.insert("black gem", 5, 27)
+tm.insert("lantern", 27, 19)
+tm.insert("box", 15, 19)
 
 dim ts as Tileset
 ts.loadFromFile("Nh32")
@@ -44,7 +53,7 @@ gm.el.add("", "") 'add a null entity for id 0
 gm.playerId = player_entity_create(gm)
 
 dim camera as CameraClass
-camera.w = 10
+camera.w = 14
 camera.h = 10
 camera.lockToEntity(gm.playerId, gm.cl)
 
@@ -60,6 +69,7 @@ do
 	AttributeDisplaySystem(gm.cl, gm.playerId)
 	MessageDisplaySystem(gm.ml)
 	screenunlock
+	ActorDeathSystem(gm)
 	sleep 1
 loop until gm.gameover = 1
 

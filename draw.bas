@@ -48,20 +48,20 @@ end sub
 sub AttributeDisplaySystem(cl as ComponentList, eid as integer)
 	dim matched as ComponentList = cl.entityComponents(eid).filter("AttributeComponent")
 	dim values as AttributeComponent ptr = cast(AttributeComponent ptr, matched.components(0))
-	locate 1, 50: print "HP: " + str(values->hp) + "/" + str(values->maxHp)
-	locate 2, 50: print "Sanity: " + str(values->sanity) + "/" + str(values->maxSanity)
-	locate 4, 50: print "Strength: " + str(values->strength)
-	locate 5, 50: print "Dexterity: " + str(values->dexterity)
-	locate 6, 50: print "Wisdom: " + str(values->wisdom)
-	locate 7, 50: print "Intelligence: " + str(values->intelligence)
-	locate 8, 50: print "Charisma: " + str(values->charisma)
+	locate 1, 65: print "HP: " + str(values->hp) + "/" + str(values->maxHp)
+	locate 2, 65: print "Sanity: " + str(values->sanity) + "/" + str(values->maxSanity)
+	locate 4, 65: print "Strength: " + str(values->strength)
+	locate 5, 65: print "Dexterity: " + str(values->dexterity)
+	locate 6, 65: print "Wisdom: " + str(values->wisdom)
+	locate 7, 65: print "Intelligence: " + str(values->intelligence)
+	locate 8, 65: print "Charisma: " + str(values->charisma)
 end sub
 
 sub MessageDisplaySystem(ml as MessageLog)
-	locate 10, 50: print "Messages:"
+	locate 49, 1: print "Messages:"
 	dim p as integer = 0
 	for i as integer = ml.size to ml.size - 10 step -1
-		locate 10 + p, 50: print ml.get(i)
+		locate 49 + p, 1: print ml.get(i)
 		p += 1
 	next
 end sub

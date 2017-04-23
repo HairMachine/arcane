@@ -49,6 +49,14 @@ sub InventoryListSystem(holder as integer, gm as Gamestate)
 	getkey
 end sub
 
+sub inventory_item_remove(dropped_inv as InventoryItemComponent ptr, gm as Gamestate)
+	if dropped_inv->stack = 1 then
+		dropped_inv->stack -= 1
+	else
+		gm.cl.remove(dropped_inv->id)
+	end if
+end sub
+
 sub InventoryDropSystem(holder as integer, gm as Gamestate)
 	cls
 	dim matching as ComponentList = gm.cl.filter("InventoryItemComponent")
@@ -68,11 +76,7 @@ sub InventoryDropSystem(holder as integer, gm as Gamestate)
 	dropped_item->visible = 1
 	dropped_item->x = dropper_pos->x
 	dropped_item->y = dropper_pos->y
-	if dropped_inv->stack = 1 then
-		dropped_inv->stack -= 1
-	else
-		gm.cl.remove(dropped_inv->id)
-	end if
+	inventory_item_remove(dropped_inv, gm)
 	gm.ml.add("Dropped " + gm.el.entities(dropped_id).name + ".")
 end sub
 
@@ -89,4 +93,23 @@ sub InventoryUseSystem(user as integer, gm as Gamestate)
 	dim selection as integer = getkey - 49
 	if selection < 0 or selection > matching.length - 1 then exit sub
 	ArtefactEffectSystem(matching.components(selection)->entity_id, user, gm)
+end sub
+
+sub InventoryNameSystem(gm as Gamestate)	
+	cls
+	dim matching as ComponentList = gm.cl.filter("InventoryItemComponent")
+	for i as integer = 0 to matching.length - 1
+		dim item as InventoryItemComponent ptr = Cast(InventoryItemComponent ptr, matching.components(i))
+		if item->holder = gm.playerId then
+			print str(i + 1) + ") " + gm.el.entities(item->entity_id).name + " (" + str(item->stack + 1) + ")"
+		end if
+	next
+	'name
+	dim selection as integer = getkey - 49
+	if selection < 0 or selection > matching.length - 1 then exit sub
+	cls
+	print "Name " + gm.el.entities(matching.components(selection)->entity_id).name + ":"
+	dim n as string
+	input n
+	gm.el.entities(matching.components(selection)->entity_id).name = n 
 end sub

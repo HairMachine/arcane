@@ -124,3 +124,18 @@ sub MoveEntitySystem(gm as Gamestate, map as MapData, eid as integer, direction 
 			end if
 	end select
 end sub
+
+sub ActorDeathSystem(gm as Gamestate)
+	dim matching as ComponentList = gm.cl.filter("AttributeComponent")
+	for i as integer = 0 to matching.length - 1
+		dim c as AttributeComponent ptr = cast(AttributeComponent ptr, matching.components(i))
+		if c->strength <= 0 or c->dexterity <= 0 or c->intelligence <= 0 or c->wisdom <= 0 or c->charisma <= 0 or c->hp <= 0 then
+			if c->entity_id = gm.playerId then
+				cls
+				print "You have died."
+				getkey
+				gm.gameOver = 1
+			end if
+		end if
+	next
+end sub
