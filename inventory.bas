@@ -17,19 +17,29 @@ sub InventoryPickupSystem(picker as integer, gm as Gamestate)
 	for i as integer = 0 to things_here.length - 1
 		dim item as PositionComponent ptr = cast(PositionComponent ptr, things_here.components(i))
 		if item->x = posi->x and item->y = posi->y and item->liftable = 1 and posi->entity_id <> item->entity_id then
-			'todo: stacks; for now, get everything
-			gm.ml.add("Picked up " + gm.el.entities(item->entity_id).name + ".")
-			dim matching as ComponentList = gm.cl.filter("InventoryItemComponent")
-			dim already_had as integer = 0
-			for j as integer = 0 to matching.length - 1
-				dim held_item as InventoryItemComponent ptr = Cast(InventoryItemComponent ptr, matching.components(j))
-				if held_item->holder = picker and gm.el.entities(held_item->entity_id).name = gm.el.entities(item->entity_id).name then
-					held_item->stack += 1
-					already_had = 1
-					exit for
-				end if
-			next
-			if already_had = 0 then gm.cl.add(new InventoryItemComponent(item->entity_id, picker))
+			'is this a book?
+			dim bk as BookComponent ptr = cast(BookComponent ptr, gm.cl.entityComponent(item->entity_id, "BookComponent"))
+			if bk then
+				gm.ml.add("Found " + gm.el.entities(item->entity_id).name + ".")
+				cls
+				book_show_text(bk)
+				getkey
+				'todo: add to the player's library
+			else
+				'todo: stacks; for now, get everything
+				gm.ml.add("Picked up " + gm.el.entities(item->entity_id).name + ".")
+				dim matching as ComponentList = gm.cl.filter("InventoryItemComponent")
+				dim already_had as integer = 0
+				for j as integer = 0 to matching.length - 1
+					dim held_item as InventoryItemComponent ptr = Cast(InventoryItemComponent ptr, matching.components(j))
+					if held_item->holder = picker and gm.el.entities(held_item->entity_id).name = gm.el.entities(item->entity_id).name then
+						held_item->stack += 1
+						already_had = 1
+						exit for
+					end if
+				next
+				if already_had = 0 then gm.cl.add(new InventoryItemComponent(item->entity_id, picker))
+			end if
 			item->visible = 0
 			item->x = -5
 			item->y = -5

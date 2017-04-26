@@ -5,6 +5,8 @@
 #include once "map.bas"
 #include once "game.bas"
 #include once "actor.bas"
+#include once "book.bas"
+#include once "essence.bas"
 #include once "artefact.bas"
 #include once "inventory.bas"
 #include once "input.bas"
@@ -38,6 +40,8 @@ tm.insert("red gem", 1, 27)
 tm.insert("black gem", 5, 27)
 tm.insert("lantern", 27, 19)
 tm.insert("box", 15, 19)
+tm.insert("essence", 8, 16)
+tm.insert("book", 0, 24)
 
 dim ts as Tileset
 ts.loadFromFile("Nh32")

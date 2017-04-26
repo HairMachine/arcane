@@ -28,6 +28,12 @@ sub MapToEntitySystem(gm as Gamestate, map as Mapdata)
 			elseif map.get(x, y) = "?" then
 				artefact_entity_create(gm, x, y)
 				map.set(x, y, ".")
+			elseif map.get(x, y) = "%" then
+				essence_entity_create_random(gm, x, y)
+				map.set(x, y, ".")
+			elseif map.get(x, y) = "&" then
+				book_entity_create(gm, x, y)
+				map.set(x, y, ".")
 			end if
 		next
 	next

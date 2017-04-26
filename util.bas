@@ -3,6 +3,10 @@ type IntPair
 	two as integer
 end type
 
+type StringList
+	items(127) as string
+end type
+
 function d(sides as integer, num as integer) as integer
 	dim roll as integer = 0
 	for i as integer = 1 to num

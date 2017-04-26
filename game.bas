@@ -4,4 +4,5 @@ type Gamestate
 	el as EntityList
 	cl as ComponentList
 	ml as MessageLog
+	lb as StringList
 end type
