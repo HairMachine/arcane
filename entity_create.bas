@@ -34,6 +34,15 @@ sub MapToEntitySystem(gm as Gamestate, map as Mapdata)
 			elseif map.get(x, y) = "&" then
 				book_entity_create(gm, x, y)
 				map.set(x, y, ".")
+			elseif map.get(x, y) = "I" then
+				distiller_input_entity_create(gm, x, y)
+				map.set(x, y, ".")
+			elseif map.get(x, y) = "$" then
+				distiller_output_entity_create(gm, x, y)
+				map.set(x, y, ".")
+			elseif map.get(x, y) = "|" then
+				distiller_switch_entity_create(gm, x, y)
+				map.set(x, y, ".")
 			end if
 		next
 	next

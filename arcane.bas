@@ -5,9 +5,11 @@
 #include once "map.bas"
 #include once "game.bas"
 #include once "actor.bas"
-#include once "book.bas"
 #include once "essence.bas"
+#include once "elixir.bas"
+#include once "book.bas"
 #include once "artefact.bas"
+#include once "distiller.bas"
 #include once "inventory.bas"
 #include once "input.bas"
 #include once "draw.bas"
@@ -42,12 +44,17 @@ tm.insert("lantern", 27, 19)
 tm.insert("box", 15, 19)
 tm.insert("essence", 8, 16)
 tm.insert("book", 0, 24)
+tm.insert("|", 5, 29)
+tm.insert("I", 14, 29)
+tm.insert("$", 15, 29)
+tm.insert("elixir", 4, 22) 
 
 dim ts as Tileset
 ts.loadFromFile("Nh32")
 ts.tileMap = tm
 
 dim gm as Gamestate
+essence_init(gm)
 
 dim map as MapData
 map.loadFromFile("test")

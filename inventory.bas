@@ -21,10 +21,10 @@ sub InventoryPickupSystem(picker as integer, gm as Gamestate)
 			dim bk as BookComponent ptr = cast(BookComponent ptr, gm.cl.entityComponent(item->entity_id, "BookComponent"))
 			if bk then
 				gm.ml.add("Found " + gm.el.entities(item->entity_id).name + ".")
+				bk->holder = picker
 				cls
 				book_show_text(bk)
 				getkey
-				'todo: add to the player's library
 			else
 				'todo: stacks; for now, get everything
 				gm.ml.add("Picked up " + gm.el.entities(item->entity_id).name + ".")

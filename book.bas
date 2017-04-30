@@ -1,6 +1,7 @@
 type BookComponent extends Component
 	text as string
 	spell as string
+	holder as integer
 	declare constructor(eid as integer, text as string, spell as string)
 end type
 
@@ -9,6 +10,7 @@ constructor BookComponent(eid as integer, text as string, spell as string)
 	this.name = "BookComponent"
 	this.text = text
 	this.spell = spell
+	this.holder = -1
 end constructor
 
 sub book_show_text(bc as BookComponent ptr)
@@ -21,6 +23,48 @@ sub book_show_text(bc as BookComponent ptr)
 		input #handle, line_in
 		print line_in
 	wend
+end sub
+
+sub BookReadSystem(reader as integer, gm as Gamestate)
+	cls
+	print "Read which book?"
+	dim matching as ComponentList = gm.cl.filter("BookComponent")
+	for i as integer = 0 to matching.length - 1
+		dim bk as BookComponent ptr = cast(BookComponent ptr, matching.components(i))
+		if bk->holder = reader then
+			print str(i + 1) + ") " + gm.el.entities(bk->entity_id).name
+		end if
+	next
+	dim a as integer
+	input a
+	if a - 1 < matching.length and a - 1 >= 0 then
+		cls
+		book_show_text(cast(BookComponent ptr, matching.components(a - 1)))
+		getkey
+	end if
+end sub
+
+sub spellbook_cast(bk as BookComponent ptr, gm as Gamestate)
+	dim posi as PositionComponent ptr = cast(PositionComponent ptr, gm.cl.entityComponent(bk->holder, "PositionComponent"))
+	gm.ml.add(gm.el.entities(bk->holder).name + " marshalls the arcane forces...")
+	essence_entity_create(gm, posi->x, posi->y, bk->spell)
+end sub
+
+sub SpellCastSystem(caster as integer, gm as Gamestate)
+	cls
+	print "Cast which spell?"
+	dim matching as ComponentList = gm.cl.filter("BookComponent")
+	for i as integer = 0 to matching.length - 1
+		dim bk as BookComponent ptr = cast(BookComponent ptr, matching.components(i))
+		if bk->holder = caster then
+			print str(i + 1) + ") " + gm.el.entities(bk->entity_id).name
+		end if
+	next
+	dim a as integer
+	input a
+	if a - 1 < matching.length and a - 1 >= 0 then
+		spellbook_cast(cast(BookComponent ptr, matching.components(a - 1)), gm)
+	end if
 end sub
 
 /'
