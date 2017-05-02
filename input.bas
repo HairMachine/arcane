@@ -9,6 +9,7 @@ end constructor
 
 sub GenericInteractionSystem(gm as Gamestate)
 	DistillerUseSystem(gm.playerId, gm)
+	RitualUseSystem(gm.playerId, gm)
 end sub
 
 sub KeyboardControlSystem(gm as Gamestate, map as MapData)
@@ -32,7 +33,6 @@ sub KeyboardControlSystem(gm as Gamestate, map as MapData)
 		case "d": InventoryDropSystem(gm.playerid, gm)
 		case "n": InventoryNameSystem(gm)
 		case "r": BookReadSystem(gm.playerId, gm)
-		case "z": SpellCastSystem(gm.playerId, gm)
 		case " ": GenericInteractionSystem(gm)
 		case "q": gm.gameover = 1
 	end select	

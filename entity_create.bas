@@ -43,6 +43,9 @@ sub MapToEntitySystem(gm as Gamestate, map as Mapdata)
 			elseif map.get(x, y) = "|" then
 				distiller_switch_entity_create(gm, x, y)
 				map.set(x, y, ".")
+			elseif map.get(x, y) = "R" then
+				ritual_trigger_entity_create(gm, x, y)
+				map.set(x, y, ".")
 			end if
 		next
 	next

@@ -10,6 +10,7 @@
 #include once "book.bas"
 #include once "artefact.bas"
 #include once "distiller.bas"
+#include once "ritual.bas"
 #include once "inventory.bas"
 #include once "input.bas"
 #include once "draw.bas"
@@ -47,7 +48,8 @@ tm.insert("book", 0, 24)
 tm.insert("|", 5, 29)
 tm.insert("I", 14, 29)
 tm.insert("$", 15, 29)
-tm.insert("elixir", 4, 22) 
+tm.insert("elixir", 4, 22)
+tm.insert("ritual_switch", 16, 29)
 
 dim ts as Tileset
 ts.loadFromFile("Nh32")

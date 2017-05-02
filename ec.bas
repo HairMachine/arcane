@@ -9,6 +9,15 @@ sub Component.setEntity(entity_id as integer)
 	this.entity_id = entity_id
 end sub
 
+type TagComponent extends Component
+	declare constructor(eid as integer, n as string)
+end type
+
+constructor TagComponent(eid as integer, n as string)
+	this.entity_id = eid
+	this.name = n
+end constructor
+
 type ComponentList
 	components(255) as Component ptr
 	length as integer
